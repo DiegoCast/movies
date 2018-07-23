@@ -4,6 +4,10 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
+apply plugin: 'kotlin-kapt'
+
+apply from: '../dependencies.gradle'
+
 android {
     compileSdkVersion 27
     defaultConfig {
@@ -23,11 +27,39 @@ android {
 }
 
 dependencies {
+    
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
-    implementation 'com.android.support:appcompat-v7:27.1.1'
-    implementation 'com.android.support.constraint:constraint-layout:1.1.2'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    
+    def ui = rootProject.ext.uiDependencies
+    def domain = rootProject.ext.domainDependencies
+    def test = rootProject.ext.testDependecies
+    
+    compileOnly domain.annotationProcessor
+    
+    implementation ui.supportLibrary
+    implementation ui.recyclerView
+    implementation ui.constraintLayout
+    implementation ui.butterKnife
+    kapt ui.butterKnifeApt
+    implementation ui.archLifeCycle
+    
+    implementation domain.retrofit
+    implementation domain.retrofitGsonConverter
+    implementation domain.retrofitRxJava2Adapter
+    implementation domain.retrofitConverterScalars
+    implementation domain.rxJava2
+    implementation domain.rxAndroid
+    implementation domain.dagger
+    kapt domain.daggerApt
+    implementation domain.loggingInterceptor
+    implementation domain.okHttpUrlConnection
+    
+    testImplementation test.junit
+    testImplementation test.mockito
+    testImplementation test.mockwebserver
+    
+    androidTestImplementation test.supportAnnotations
+    androidTestImplementation test.testRunner
+    androidTestImplementation test.espresso
 }
