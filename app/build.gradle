@@ -18,11 +18,57 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+    
     buildTypes {
         release {
+            manifestPlaceholders = [appName: "MoviesApp"]
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+        
+        debug {
+            manifestPlaceholders = [appName: "MoviesApp Debug"]
+            applicationIdSuffix ".debug"
+            // Avoid DexIndexOverflowException
+            // minifyEnabled true
+            // multiDexEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    
+    dataBinding {
+        enabled = true
+    }
+    
+    flavorDimensions "main"
+    
+    productFlavors {
+        mock {
+            buildConfigField "String", "ENVIRONMENT", "\"development\""
+            buildConfigField "String", "APIURL", "\"https://api.themoviedb.org/3/\""
+            buildConfigField "String", "APIKEY", "\"76a95aa43c2db657d2389027acccb1f6\""
+            
+            dimension "main"
+        }
+        production {
+            buildConfigField "String", "ENVIRONMENT", "\"production\""
+            buildConfigField "String", "APIURL", "\"https://api.themoviedb.org/3/\""
+            buildConfigField "String", "APIKEY", "\"76a95aa43c2db657d2389027acccb1f6\""
+    
+            dimension "main"
+        }
+    }
+    
+    // Disable mockRelease
+    android.variantFilter { variant ->
+        if (variant.buildType.name == 'release') {
+            if (variant.getFlavors().get(0).name == 'mock') {
+                variant.setIgnore(true)
+            }
+        }
+    }
+    packagingOptions {
+        exclude 'META-INF/rxjava.properties'
     }
 }
 
