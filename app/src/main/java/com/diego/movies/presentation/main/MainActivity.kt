@@ -1,7 +1,8 @@
-package com.diego.movies
+package com.diego.movies.presentation.main
 
 import android.app.Activity
 import android.os.Bundle
+import com.diego.movies.R
 
 class MainActivity : Activity () {
     
