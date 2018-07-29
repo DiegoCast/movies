@@ -1,4 +1,4 @@
-package com.diego.movies.presentation.dependency
+package com.diego.movies.presentation.dependency.application
 
 import com.diego.movies.App
 import dagger.Module

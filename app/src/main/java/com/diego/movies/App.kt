@@ -2,7 +2,7 @@ package com.diego.movies
 
 import android.app.Application
 import com.diego.movies.presentation.dependency.ApplicationComponent
-import com.diego.movies.presentation.dependency.ApplicationModule
+import com.diego.movies.presentation.dependency.application.ApplicationModule
 import com.diego.movies.presentation.dependency.DaggerApplicationComponent
 import com.squareup.picasso.Picasso
 

@@ -59,6 +59,10 @@ android {
         }
     }
     
+    sourceSets {
+        production.java.srcDirs += 'src/common/java'
+    }
+    
     // Disable mockRelease
     android.variantFilter { variant ->
         if (variant.buildType.name == 'release') {
