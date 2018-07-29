@@ -43,6 +43,7 @@ dependencies {
     implementation ui.butterKnife
     kapt ui.butterKnifeApt
     implementation ui.archLifeCycle
+    implementation ui.picasso
     
     implementation domain.retrofit
     implementation domain.retrofitGsonConverter

@@ -15,6 +15,7 @@ rootProject.ext {
     testRunnerVersion = '1.0.2'
     espressoVersion = '3.0.2'
     constraintLayoutVersion = '1.1.2'
+    picassoVersion = '2.71828'
     
     domainDependencies = [
         retrofit              : "com.squareup.retrofit2:retrofit:$retrofitVersion",
@@ -38,7 +39,8 @@ rootProject.ext {
         butterKnife           : "com.jakewharton:butterknife:$butterKnifeVersion",
         butterKnifeApt        : "com.jakewharton:butterknife-compiler:$butterKnifeVersion",
         recyclerView          : "com.android.support:recyclerview-v7:$supportLibraryVersion",
-        archLifeCycle         : "android.arch.lifecycle:extensions:$archLifeCycleVersion"
+        archLifeCycle         : "android.arch.lifecycle:extensions:$archLifeCycleVersion",
+        picasso               : "com.squareup.picasso:picasso:$picassoVersion"
     ]
     
     testDependecies = [
