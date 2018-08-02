@@ -83,6 +83,7 @@ dependencies {
     
     def ui = rootProject.ext.uiDependencies
     def domain = rootProject.ext.domainDependencies
+    def data = rootProject.ext.dataDependencies
     def test = rootProject.ext.testDependecies
     
     compileOnly domain.annotationProcessor
@@ -105,6 +106,9 @@ dependencies {
     kapt domain.daggerApt
     implementation domain.loggingInterceptor
     implementation domain.okHttpUrlConnection
+    
+    implementation data.moshiConverter
+    implementation data.moshi
     
     testImplementation test.junit
     testImplementation test.mockito

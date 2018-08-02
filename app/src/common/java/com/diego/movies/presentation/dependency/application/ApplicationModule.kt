@@ -2,11 +2,13 @@ package com.diego.movies.presentation.dependency.application
 
 import com.diego.movies.App
 import com.diego.movies.BuildConfig
-import com.diego.movies.R
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Retrofit
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
+import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
@@ -23,6 +25,17 @@ class ApplicationModule(val app: App) {
                 .connectTimeout(30, TimeUnit.SECONDS)
                 .readTimeout(30, TimeUnit.SECONDS)
                 .addInterceptor(getLoggingInterceptor())
+                .build()
+    }
+    
+    @Singleton
+    @Provides
+    internal fun providesRetrofit(okHttpClient: OkHttpClient): Retrofit {
+        return Retrofit.Builder()
+                .baseUrl(BuildConfig.APIURL)
+                .addConverterFactory(MoshiConverterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .client(okHttpClient)
                 .build()
     }
     
