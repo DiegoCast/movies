@@ -96,17 +96,15 @@ dependencies {
     implementation ui.archLifeCycle
     implementation ui.picasso
     
-    implementation domain.retrofit
-    implementation domain.retrofitGsonConverter
-    implementation domain.retrofitRxJava2Adapter
-    implementation domain.retrofitConverterScalars
     implementation domain.rxJava2
     implementation domain.rxAndroid
     implementation domain.dagger
     kapt domain.daggerApt
-    implementation domain.loggingInterceptor
-    implementation domain.okHttpUrlConnection
     
+    implementation data.retrofit
+    implementation data.retrofitRxJava2Adapter
+    implementation data.loggingInterceptor
+    implementation data.okHttpUrlConnection
     implementation data.moshiConverter
     implementation data.moshi
     
