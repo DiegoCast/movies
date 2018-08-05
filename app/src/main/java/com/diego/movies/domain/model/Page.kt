@@ -1,3 +1,3 @@
 package com.diego.movies.domain.model
 
-class Page <T> (data : T, page : Int)
+data class Page <T> (val data : T, val page : Int)

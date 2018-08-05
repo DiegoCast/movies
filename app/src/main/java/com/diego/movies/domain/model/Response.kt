@@ -1,3 +1,3 @@
 package com.diego.movies.domain.model
 
-class Response <T, S> (data : T, state : S)
+data class Response <T, S> (val result : T, val succesful : S)
