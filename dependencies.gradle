@@ -18,6 +18,7 @@ rootProject.ext {
     picassoVersion = '2.71828'
     moshiVersion = '2.4.0'
     moshiConverterVersion = '1.6.0'
+    mockitoKotlinVersion = '2.0.0-RC1'
     
     dataDependencies = [
         retrofit              : "com.squareup.retrofit2:retrofit:$retrofitVersion",
@@ -53,6 +54,7 @@ rootProject.ext {
         mockito           : "org.mockito:mockito-core:$mockitoVersion",
         supportAnnotations: "com.android.support:support-annotations:$supportLibraryVersion",
         espresso          : "com.android.support.test.espresso:espresso-core:$espressoVersion",
-        mockwebserver     : "com.squareup.okhttp3:mockwebserver:$mockWebServerVersion"
+        mockwebserver     : "com.squareup.okhttp3:mockwebserver:$mockWebServerVersion",
+        mockitoKotlin     : "com.nhaarman.mockitokotlin2:mockito-kotlin:$mockitoKotlinVersion"
     ]
 }

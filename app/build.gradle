@@ -111,6 +111,7 @@ dependencies {
     testImplementation test.junit
     testImplementation test.mockito
     testImplementation test.mockwebserver
+    testImplementation test.mockitoKotlin
     
     androidTestImplementation test.supportAnnotations
     androidTestImplementation test.testRunner
