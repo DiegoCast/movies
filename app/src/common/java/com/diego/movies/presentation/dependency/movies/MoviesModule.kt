@@ -10,6 +10,5 @@ import javax.inject.Singleton
 class MoviesModule(val view: MoviesView) {
     
     @Provides
-    @Singleton
     fun provideView() = view
 }
