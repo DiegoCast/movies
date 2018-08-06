@@ -22,8 +22,11 @@ class MoviesActivity : AppCompatActivity (), MoviesView, LifecycleOwner {
         lifecycle.addObserver(presenter)
     }
     
-    
     override fun show(movies: List<Movie>) {
     
+    }
+    
+    override fun showError() {
+        //show retry button and error
     }
 }
