@@ -94,6 +94,7 @@ dependencies {
     implementation ui.butterKnife
     kapt ui.butterKnifeApt
     implementation ui.archLifeCycle
+    kapt ui.archLifeCycleProcessor
     implementation ui.picasso
     
     implementation domain.rxJava2

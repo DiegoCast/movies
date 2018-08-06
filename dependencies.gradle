@@ -45,6 +45,7 @@ rootProject.ext {
         butterKnifeApt        : "com.jakewharton:butterknife-compiler:$butterKnifeVersion",
         recyclerView          : "com.android.support:recyclerview-v7:$supportLibraryVersion",
         archLifeCycle         : "android.arch.lifecycle:extensions:$archLifeCycleVersion",
+        archLifeCycleProcessor: "android.arch.lifecycle:compiler:$archLifeCycleVersion",
         picasso               : "com.squareup.picasso:picasso:$picassoVersion"
     ]
     
