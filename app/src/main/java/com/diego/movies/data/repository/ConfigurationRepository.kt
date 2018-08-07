@@ -2,7 +2,7 @@ package com.diego.movies.data.repository
 
 import javax.inject.Inject
 
-class PreferencesRepository @Inject constructor() {
+class ConfigurationRepository @Inject constructor() {
     
     var imageBaseUrl = ""
     var imageSize = ""

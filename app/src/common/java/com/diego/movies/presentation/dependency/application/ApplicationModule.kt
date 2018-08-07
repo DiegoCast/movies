@@ -1,6 +1,8 @@
 package com.diego.movies.presentation.dependency.application
 
+import android.content.Context
 import com.diego.movies.App
+import com.diego.movies.data.repository.ConfigurationRepository
 import dagger.Module
 import dagger.Provides
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -14,7 +16,11 @@ class ApplicationModule(val app: App) {
     
     @Provides
     @Singleton
-    fun provideApp() = app
+    fun provideContext(): Context = app.baseContext
+    
+    @Provides
+    @Singleton
+    fun provideConfigurationRepository() = ConfigurationRepository()
     
     @Provides
     @Singleton

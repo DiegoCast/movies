@@ -2,6 +2,9 @@ package com.diego.movies.data.api
 
 import com.diego.movies.data.model.MovieMapper
 import com.diego.movies.data.model.MovieResultsEntity
+import com.diego.movies.data.repository.MoviesApiRepository
+import com.diego.movies.data.repository.ConfigurationRepository
+import com.diego.movies.domain.model.Movie
 import com.diego.movies.domain.model.Page
 import com.nhaarman.mockitokotlin2.mock
 import createMovieResultsEntity
@@ -13,6 +16,10 @@ import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito
 import retrofit2.Response
+import readFileContent
+import java.io.File
+import com.google.gson.JsonParser
+import io.reactivex.Single
 
 class MoviesApiRepositoryTest {
     
@@ -22,22 +29,33 @@ class MoviesApiRepositoryTest {
     private lateinit var repository: MoviesApiRepository
     
     private val mockApi = mock<MoviesRestApi> {}
-    private val mapper = MovieMapper()
+    private val mockConfigurationRepository = mock<ConfigurationRepository> {}
+    
+    private lateinit var mapper: MovieMapper
     private val emitter: PublishSubject<Int> = PublishSubject.create()
     
-    private val movieResultsEntityItem = createMovieResultsEntity(0, 2)
-    private val movieResultsEntityNextItem = createMovieResultsEntity(1, 1)
-    private val movieResultsEntityNext2Item = createMovieResultsEntity(2, 1)
+    private val movieResultsEntityItem = createMovieResultsEntity(1, 2)
+    private val movieResultsEntityNextItem = createMovieResultsEntity(2, 1)
+    private val movieResultsEntityNext2Item = createMovieResultsEntity(3, 1)
     
-    private var moviesResponse = mapper.mapToDomain(movieResultsEntityItem.results)
-    private var moviesNextResponse = mapper.mapToDomain(movieResultsEntityNextItem.results)
-    private var moviesNext2Response = mapper.mapToDomain(movieResultsEntityNextItem.results)
+    private lateinit var moviesResponse: List<Movie>
+    private lateinit var moviesNextResponse: List<Movie>
+    private lateinit var moviesNext2Response: List<Movie>
     
     private val errorResponseBody = ResponseBody.create(MediaType.parse("application/json"), "error")
     
+    private val parser = JsonParser()
+    
     @Before
     fun setUp() {
-        repository = MoviesApiRepository(mockApi, mapper, emitter, language, apiKey)
+        
+        mapper = MovieMapper(mockConfigurationRepository)
+        
+        moviesResponse = mapper.mapToDomain(movieResultsEntityItem.results)
+        moviesNextResponse = mapper.mapToDomain(movieResultsEntityNextItem.results)
+        moviesNext2Response = mapper.mapToDomain(movieResultsEntityNextItem.results)
+        
+        repository = MoviesApiRepository(mockApi, mapper, mockConfigurationRepository, emitter, language, apiKey)
     }
     
     @Test
@@ -45,15 +63,15 @@ class MoviesApiRepositoryTest {
         val response = Response.success(movieResultsEntityItem)
         
         // given
-        Mockito.`when`(mockApi.popular(apiKey, language, 0)).thenReturn(Observable.just(response))
+        Mockito.`when`(mockApi.popular(apiKey, language, 1)).thenReturn(Observable.just(response))
         
         // when
         val test = repository.get().test()
         
         // then
-        Mockito.verify(mockApi).popular(apiKey, language, 0)
+        Mockito.verify(mockApi).popular(apiKey, language, 1)
         test.assertValue(com.diego.movies.domain.model.Response(
-                Page(moviesResponse, 0), true))
+                Page(moviesResponse, 1), true))
     }
     
     @Test
@@ -61,16 +79,16 @@ class MoviesApiRepositoryTest {
         val response = Response.error<MovieResultsEntity>(500, errorResponseBody)
         
         // given
-        Mockito.`when`(mockApi.popular(apiKey, language, 0))
+        Mockito.`when`(mockApi.popular(apiKey, language, 1))
                 .thenReturn(Observable.just(response))
         
         // when
         val test = repository.get().test()
         
         // then
-        Mockito.verify(mockApi).popular(apiKey, language, 0)
+        Mockito.verify(mockApi).popular(apiKey, language, 1)
         test.assertValue(com.diego.movies.domain.model.Response(
-                Page(emptyList(), 0), false))
+                Page(emptyList(), 1), false))
     }
     
     @Test
@@ -79,26 +97,26 @@ class MoviesApiRepositoryTest {
         val nextPage = Response.success(movieResultsEntityNextItem)
         val nextPage2 = Response.success(movieResultsEntityNext2Item)
         val first = com.diego.movies.domain.model.Response(
-                Page(mapper.mapToDomain(movieResultsEntityItem.results), 0), true)
+                Page(moviesResponse, 1), true)
         val next = com.diego.movies.domain.model.Response(
-                Page(moviesResponse.plus(moviesNextResponse), 1), true)
+                Page(moviesResponse.plus(moviesNextResponse), 2), true)
         val next2 = com.diego.movies.domain.model.Response(
-                Page(moviesResponse.plus(moviesNextResponse).plus(moviesNext2Response), 2), true)
+                Page(moviesResponse.plus(moviesNextResponse).plus(moviesNext2Response), 3), true)
         
         // given
-        Mockito.`when`(mockApi.popular(apiKey, language, 0)).thenReturn(Observable.just(response))
-        Mockito.`when`(mockApi.popular(apiKey, language, 1)).thenReturn(Observable.just(nextPage))
-        Mockito.`when`(mockApi.popular(apiKey, language, 2)).thenReturn(Observable.just(nextPage2))
+        Mockito.`when`(mockApi.popular(apiKey, language, 1)).thenReturn(Observable.just(response))
+        Mockito.`when`(mockApi.popular(apiKey, language, 2)).thenReturn(Observable.just(nextPage))
+        Mockito.`when`(mockApi.popular(apiKey, language, 3)).thenReturn(Observable.just(nextPage2))
         
         // when
         val test = repository.get().test()
-        emitter.onNext(1)
         emitter.onNext(2)
+        emitter.onNext(3)
         
         // then
-        Mockito.verify(mockApi).popular(apiKey, language, 0)
         Mockito.verify(mockApi).popular(apiKey, language, 1)
         Mockito.verify(mockApi).popular(apiKey, language, 2)
+        Mockito.verify(mockApi).popular(apiKey, language, 3)
         test.assertValues(first, next, next2)
     }
     
@@ -108,26 +126,66 @@ class MoviesApiRepositoryTest {
         val nextPage = Response.success(movieResultsEntityNextItem)
         val responseError = Response.error<MovieResultsEntity>(500, errorResponseBody)
         val first = com.diego.movies.domain.model.Response(
-                Page(mapper.mapToDomain(movieResultsEntityItem.results), 0), true)
+                Page(moviesResponse, 1), true)
         val next = com.diego.movies.domain.model.Response(
-                Page(moviesResponse.plus(moviesNextResponse), 1), true)
+                Page(moviesResponse.plus(moviesNextResponse), 2), true)
         val next2 = com.diego.movies.domain.model.Response(
-                Page(moviesResponse.plus(moviesNextResponse), 1), false)
+                Page(moviesResponse.plus(moviesNextResponse), 2), false)
         
         // given
-        Mockito.`when`(mockApi.popular(apiKey, language, 0)).thenReturn(Observable.just(response))
-        Mockito.`when`(mockApi.popular(apiKey, language, 1)).thenReturn(Observable.just(nextPage))
-        Mockito.`when`(mockApi.popular(apiKey, language, 2)).thenReturn(Observable.just(responseError))
+        Mockito.`when`(mockApi.popular(apiKey, language, 1)).thenReturn(Observable.just(response))
+        Mockito.`when`(mockApi.popular(apiKey, language, 2)).thenReturn(Observable.just(nextPage))
+        Mockito.`when`(mockApi.popular(apiKey, language, 3)).thenReturn(Observable.just(responseError))
         
         // when
         val test = repository.get().test()
-        emitter.onNext(1)
         emitter.onNext(2)
+        emitter.onNext(3)
         
         // then
-        Mockito.verify(mockApi).popular(apiKey, language, 0)
         Mockito.verify(mockApi).popular(apiKey, language, 1)
         Mockito.verify(mockApi).popular(apiKey, language, 2)
+        Mockito.verify(mockApi).popular(apiKey, language, 3)
         test.assertValues(first, next, next2)
+    }
+    
+    @Test
+    fun `update configuration success`() {
+        val jsonFile = File("configuration_test.json")
+        val path = jsonFile.absolutePath
+        val jsonString = readFileContent(File(path))
+        val response = okhttp3.ResponseBody.create(MediaType.parse("application/json"), jsonString)
+        val jsonObject = parser.parse(jsonString).asJsonObject
+        val images = jsonObject.getAsJsonObject("images")
+        val imageBaseUrl = images.get("base_url").asString
+        val imageSizeJsonArray = images.getAsJsonArray("poster_sizes")
+        val imageSizeArray: MutableList<String> = mutableListOf()
+        
+        for (i in 0..(imageSizeJsonArray.size() - 1)) {
+            imageSizeArray.add(imageSizeJsonArray[i].asString)
+        }
+        
+        // given
+        Mockito.`when`(mockApi.configuration(apiKey)).thenReturn(Single.just(response))
+        
+        // when
+        val test = repository.updateConfiguration().test()
+        
+        // then
+        Mockito.verify(mockConfigurationRepository).updateConfiguration(imageBaseUrl, imageSizeArray)
+        test.assertValue(true)
+    }
+    
+    @Test
+    fun `update configuration error`() {
+        
+        // given
+        Mockito.`when`(mockApi.configuration(apiKey)).thenReturn(Single.error(Throwable()))
+        
+        // when
+        val test = repository.updateConfiguration().test()
+        
+        // then
+        test.assertValue(false)
     }
 }

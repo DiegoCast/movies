@@ -3,20 +3,12 @@ package com.diego.movies
 import android.app.Application
 import com.diego.movies.presentation.dependency.ApplicationComponent
 import com.diego.movies.presentation.dependency.DaggerApplicationComponent
+import com.diego.movies.presentation.dependency.application.ApplicationModule
 import com.squareup.picasso.Picasso
 
 class App : Application () {
     
-    companion object {
-        val component: ApplicationComponent by lazy {
-            DaggerApplicationComponent
-                    .builder()
-                    .build()
-        }
-        
-        fun getAppComponent() = component
-    }
-    
+    lateinit var component: ApplicationComponent private set
     
     override fun onCreate() {
         super.onCreate()
@@ -26,5 +18,10 @@ class App : Application () {
             picassoBuilder.indicatorsEnabled(true)
         }
         Picasso.setSingletonInstance(picassoBuilder.build())
+        
+        component = DaggerApplicationComponent
+                .builder()
+                .applicationModule(ApplicationModule(this))
+                .build()
     }
 }
