@@ -96,6 +96,7 @@ dependencies {
     implementation ui.archLifeCycle
     kapt ui.archLifeCycleProcessor
     implementation ui.picasso
+    implementation ui.cardView
     
     implementation domain.rxJava2
     implementation domain.rxAndroid
@@ -108,12 +109,15 @@ dependencies {
     implementation data.okHttpUrlConnection
     implementation data.moshiConverter
     implementation data.moshi
+    implementation data.moshiKotlinJson
+    implementation data.gson
     
     testImplementation test.junit
     testImplementation test.mockito
     testImplementation test.mockwebserver
     testImplementation test.mockitoKotlin
     testImplementation test.mockitoInline
+    testImplementation test.mockito
     
     androidTestImplementation test.supportAnnotations
     androidTestImplementation test.testRunner
