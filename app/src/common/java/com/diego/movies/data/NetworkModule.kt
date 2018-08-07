@@ -2,6 +2,8 @@ package com.diego.movies.data
 
 import com.diego.movies.BuildConfig
 import com.diego.movies.data.api.MoviesRestApi
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
 import dagger.Provides
 import io.reactivex.subjects.PublishSubject
@@ -34,11 +36,11 @@ class NetworkModule {
     
     @Singleton
     @Provides
-    internal fun providesRetrofit(okHttpClient: OkHttpClient): Retrofit {
+    fun providesRetrofit(okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
                 .baseUrl(BuildConfig.APIURL)
-                .addConverterFactory(MoshiConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .addConverterFactory(MoshiConverterFactory.create(Moshi.Builder().add(KotlinJsonAdapterFactory()).build()))
                 .client(okHttpClient)
                 .build()
     }
