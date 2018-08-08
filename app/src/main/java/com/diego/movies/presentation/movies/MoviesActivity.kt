@@ -4,6 +4,7 @@ import android.arch.lifecycle.LifecycleOwner
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.GridLayoutManager
 import com.diego.movies.R
@@ -15,9 +16,8 @@ import io.reactivex.Observable
 import kotlinx.android.synthetic.main.activity_movies.*
 import javax.inject.Inject
 
-
-
-class MoviesActivity : AppCompatActivity (), MoviesView, LifecycleOwner {
+class MoviesActivity : AppCompatActivity (), MoviesView, LifecycleOwner, SwipeRefreshLayout.OnRefreshListener {
+    
     @Inject lateinit var presenter: MoviesPresenter
     
     lateinit var adapter: MoviesAdapter
@@ -50,9 +50,12 @@ class MoviesActivity : AppCompatActivity (), MoviesView, LifecycleOwner {
         }
         moviesRecyclerView.layoutManager = layoutManager
         moviesRecyclerView.adapter = adapter
+        
+        swipeContainer.setOnRefreshListener(this)
     }
     
     override fun show(movies: List<Movie>) {
+        swipeContainer.isRefreshing = false
         val recyclerViewState = layoutManager.onSaveInstanceState()
         adapter.updateList(movies)
         layoutManager.onRestoreInstanceState(recyclerViewState)
@@ -66,5 +69,9 @@ class MoviesActivity : AppCompatActivity (), MoviesView, LifecycleOwner {
     
     override fun showError() {
         //show retry button and error
+    }
+    
+    override fun onRefresh() {
+        presenter.retry()
     }
 }

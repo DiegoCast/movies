@@ -62,6 +62,7 @@ class MoviesPresenterTest {
         testScheduler.triggerActions()
         
         // then
+        Mockito.verify(view).getScrollObservable()
         Mockito.verify(getMoviesUseCase).get()
         Mockito.verify(view).showError()
     }
@@ -77,6 +78,7 @@ class MoviesPresenterTest {
         testScheduler.triggerActions()
         
         // then
+        Mockito.verify(view).getScrollObservable()
         Mockito.verify(getMoviesUseCase).get()
         Mockito.verify(view).showError()
     }
@@ -95,6 +97,7 @@ class MoviesPresenterTest {
         testScheduler.triggerActions()
         
         // then
+        Mockito.verify(view, times(2)).getScrollObservable()
         Mockito.verify(getMoviesUseCase, times(2)).get()
         Mockito.verify(view, times(2)).show(movies)
     }

@@ -34,8 +34,10 @@ class MoviesPresenter @Inject constructor(private val view: MoviesView,
     }
     
     fun retry() {
+        moviesSize = 0
+        page = 0
         compositeDisposable.clear()
-        subscribeToMovies()
+        start()
     }
     
     private fun next() {
