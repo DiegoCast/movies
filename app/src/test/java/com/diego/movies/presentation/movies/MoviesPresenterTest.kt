@@ -6,6 +6,7 @@ import com.diego.movies.domain.model.Response
 import com.diego.movies.domain.movies.GetMoviesUseCase
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.times
+import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions
 import createMovieList
 import io.reactivex.Observable
 import io.reactivex.schedulers.TestScheduler
@@ -21,11 +22,15 @@ class MoviesPresenterTest {
     private val getMoviesUseCase = mock<GetMoviesUseCase> {}
     private val testScheduler = TestScheduler()
     
-    private var movies = createMovieList(2)
+    private lateinit var scrollConsumer: MoviesPresenter.ScrollConsumer
+    
+    private var movies = createMovieList(10)
     
     @Before
     fun setUp() {
+        Mockito.`when`(view.getScrollObservable()).thenReturn(Observable.just(0))
         presenter = MoviesPresenter(view, getMoviesUseCase, testScheduler, testScheduler)
+        scrollConsumer = presenter.ScrollConsumer()
     }
     
     @Test
@@ -40,6 +45,7 @@ class MoviesPresenterTest {
         testScheduler.triggerActions()
         
         // then
+        Mockito.verify(view).getScrollObservable()
         Mockito.verify(getMoviesUseCase).get()
         Mockito.verify(view).show(movies)
     }
@@ -76,24 +82,6 @@ class MoviesPresenterTest {
     }
     
     @Test
-    fun next() {
-        val response = Response(Page(movies, 0), true)
-        
-        // given
-        Mockito.`when`(getMoviesUseCase.get()).thenReturn(Observable.just(response))
-        
-        // when
-        presenter.start()
-        testScheduler.triggerActions()
-        presenter.next()
-        
-        // then
-        Mockito.verify(getMoviesUseCase).get()
-        Mockito.verify(view).show(movies)
-        Mockito.verify(getMoviesUseCase).next(1)
-    }
-    
-    @Test
     fun retry() {
         val response = Response(Page(movies, 0), true)
         
@@ -109,5 +97,45 @@ class MoviesPresenterTest {
         // then
         Mockito.verify(getMoviesUseCase, times(2)).get()
         Mockito.verify(view, times(2)).show(movies)
+    }
+    
+    @Test
+    fun next() {
+        val response = Response(Page(movies, 0), true)
+        
+        // given
+        Mockito.`when`(getMoviesUseCase.get()).thenReturn(Observable.just(response))
+        
+        // when
+        presenter.start()
+        testScheduler.triggerActions()
+        Observable.just(7).subscribe(scrollConsumer)
+        
+        // then
+        Mockito.verify(view).getScrollObservable()
+        Mockito.verify(getMoviesUseCase).next(1)
+        Mockito.verify(getMoviesUseCase).get()
+        Mockito.verify(view).show(movies)
+    }
+    
+    @Test
+    fun `next not enough scroll`() {
+        val response = Response(Page(movies, 0), true)
+    
+        // given
+        Mockito.`when`(getMoviesUseCase.get()).thenReturn(Observable.just(response))
+    
+        // when
+        presenter.start()
+        testScheduler.triggerActions()
+        Observable.just(4).subscribe(scrollConsumer)
+        Observable.just(5).subscribe(scrollConsumer)
+        Observable.just(6).subscribe(scrollConsumer)
+    
+        // then
+        Mockito.verify(view).getScrollObservable()
+        Mockito.verify(getMoviesUseCase).get()
+        verifyNoMoreInteractions(getMoviesUseCase)
+        Mockito.verify(view).show(movies)
     }
 }

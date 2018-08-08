@@ -7,19 +7,25 @@ import com.diego.movies.domain.movies.GetMoviesUseCase
 import io.reactivex.Scheduler
 import javax.inject.Inject
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.functions.Consumer
+import java.util.concurrent.TimeUnit
 import javax.inject.Named
 
 class MoviesPresenter @Inject constructor(private val view: MoviesView,
                                           private val getMoviesUseCase: GetMoviesUseCase,
                                           @Named("main") private val main: Scheduler,
                                           @Named("io") private val io: Scheduler) : LifecycleObserver {
+    private val paginationPositionOffset = 4
     
     private val compositeDisposable = CompositeDisposable()
+    
+    private var moviesSize: Int = 0
     private var page: Int = 0
     
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
     fun start() {
         subscribeToMovies()
+        subscribeToScrollObservable()
     }
     
     @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
@@ -32,7 +38,7 @@ class MoviesPresenter @Inject constructor(private val view: MoviesView,
         subscribeToMovies()
     }
     
-    fun next() {
+    private fun next() {
         getMoviesUseCase.next(page + 1)
     }
     
@@ -43,6 +49,8 @@ class MoviesPresenter @Inject constructor(private val view: MoviesView,
                 .subscribe({ response ->
                     page = response.result.page
                     if (response.succesful) {
+                        val data = response.result.data
+                        moviesSize = data.size
                         view.show(response.result.data)
                     } else {
                         view.showError()
@@ -51,5 +59,20 @@ class MoviesPresenter @Inject constructor(private val view: MoviesView,
                     it.printStackTrace()
                     view.showError()
                 }))
+    }
+    
+    private fun subscribeToScrollObservable() {
+        compositeDisposable.add(view.getScrollObservable()
+                .observeOn(main)
+                .debounce(200, TimeUnit.MILLISECONDS)
+                .subscribe(ScrollConsumer()))
+    }
+    
+    inner class ScrollConsumer : Consumer<Int> {
+        override fun accept(position: Int) {
+            if (moviesSize > 0 && position + paginationPositionOffset > moviesSize) {
+                next()
+            }
+        }
     }
 }

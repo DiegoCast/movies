@@ -11,7 +11,12 @@ import android.support.v7.util.DiffUtil
 import com.squareup.picasso.Picasso
 
 class MoviesAdapter(val context: Context) :
-        RecyclerView.Adapter<MoviesAdapter.ViewHolder>() {
+        RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    
+    companion object {
+        val itemMovie = 0
+        val itemLoader = 1
+    }
     
     private val items = mutableListOf<Movie>()
     
@@ -22,16 +27,29 @@ class MoviesAdapter(val context: Context) :
         diffResult.dispatchUpdatesTo(this)
     }
     
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MoviesAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        if (viewType == itemLoader) {
+            return LoaderViewHolder(parent)
+        }
         return ViewHolder(parent)
     }
     
     override fun getItemCount(): Int {
-        return items.size
+        return items.size + 1
     }
     
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(items[position])
+    override fun getItemViewType(position: Int): Int {
+        return if (position == items.size) {
+            itemLoader
+        } else {
+            itemMovie
+        }
+    }
+    
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        if (holder is ViewHolder) {
+            holder.bind(items[position])
+        }
     }
     
     inner class ViewHolder(parent: ViewGroup) :
@@ -45,4 +63,7 @@ class MoviesAdapter(val context: Context) :
                     .into(itemView.movieImage)
         }
     }
+    
+    inner class LoaderViewHolder(parent: ViewGroup) :
+            RecyclerView.ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_list_loader, parent, false))
 }

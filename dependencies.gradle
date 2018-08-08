@@ -21,6 +21,7 @@ rootProject.ext {
     mockitoKotlinVersion = '2.0.0-RC1'
     mockitoInlineVersion = '2.21.0'
     gsonVersion = '2.8.5'
+    rxRecyclerViewBindingVersion = '2.1.1'
     
     dataDependencies = [
         retrofit              : "com.squareup.retrofit2:retrofit:$retrofitVersion",
@@ -50,7 +51,8 @@ rootProject.ext {
         archLifeCycle         : "android.arch.lifecycle:extensions:$archLifeCycleVersion",
         archLifeCycleProcessor: "android.arch.lifecycle:compiler:$archLifeCycleVersion",
         picasso               : "com.squareup.picasso:picasso:$picassoVersion",
-        cardView              : "com.android.support:cardview-v7:$supportLibraryVersion"
+        cardView              : "com.android.support:cardview-v7:$supportLibraryVersion",
+        rxRecyclerviewBinding : "com.jakewharton.rxbinding2:rxbinding-recyclerview-v7:$rxRecyclerViewBindingVersion"
     ]
     
     testDependecies = [

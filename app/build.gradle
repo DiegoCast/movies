@@ -97,6 +97,7 @@ dependencies {
     kapt ui.archLifeCycleProcessor
     implementation ui.picasso
     implementation ui.cardView
+    implementation ui.rxRecyclerviewBinding
     
     implementation domain.rxJava2
     implementation domain.rxAndroid
