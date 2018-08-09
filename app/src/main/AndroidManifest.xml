@@ -23,6 +23,7 @@
     </activity>
     
     <activity android:name=".presentation.movies.MoviesActivity"/>
+    <activity android:name=".presentation.detail.DetailActivity"/>
   </application>
 
 </manifest>
