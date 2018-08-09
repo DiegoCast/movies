@@ -7,7 +7,7 @@ import javax.inject.Inject
 class Navigator @Inject constructor(private val context: Context) {
     
     fun navigateToMovies() {
-        val intent = MoviesActivity.newMeInstance(context)
+        val intent = MoviesActivity.newInstance(context)
         context.startActivity(intent)
     }
 }

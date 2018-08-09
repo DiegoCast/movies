@@ -11,7 +11,7 @@ import io.reactivex.functions.Consumer
 import java.util.concurrent.TimeUnit
 import javax.inject.Named
 
-class MoviesPresenter @Inject constructor(private val view: MoviesView,
+open class MoviesPresenter @Inject constructor(private val view: MoviesView,
                                           private val getMoviesUseCase: GetMoviesUseCase,
                                           @Named("main") private val main: Scheduler,
                                           @Named("io") private val io: Scheduler) : LifecycleObserver {

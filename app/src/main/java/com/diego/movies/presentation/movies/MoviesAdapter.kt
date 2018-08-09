@@ -48,15 +48,18 @@ class MoviesAdapter(val context: Context) :
     
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is ViewHolder) {
-            holder.bind(items[position])
+            holder.bind(items[position], position)
         }
     }
     
     inner class ViewHolder(parent: ViewGroup) :
             RecyclerView.ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_list_movie, parent, false)) {
         
-        fun bind(item: Movie) {
+        fun bind(item: Movie, position: Int) {
+            itemView.moviePosition.text = (position + 1).toString()
             itemView.movieText.text = item.title.capitalize()
+            itemView.ratingBar.rating = item.voteAverage / 2
+            itemView.movieVotes.text = context.resources.getString(R.string.votes, item.voteCount.toString())
             Picasso.get()
                     .load(item.imageUrl)
                     .error(R.drawable.placeholder)

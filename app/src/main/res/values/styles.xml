@@ -6,6 +6,13 @@
     <item name="colorPrimary">@color/colorPrimary</item>
     <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
     <item name="colorAccent">@color/colorAccent</item>
+  
+    <item name="ratingBarStyle">@style/MyRatingBar</item>
+  </style>
+  
+  <style name="MyRatingBar" parent="Widget.AppCompat.RatingBar.Small">
+    <item name="colorAccent">@color/colorAccent</item>
+    <item name="android:colorControlNormal">#f9a825</item>
   </style>
 
 </resources>

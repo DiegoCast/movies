@@ -1,4 +1,6 @@
 <resources>
   <string name="app_name">Movies Kotlin</string>
   <string name="configuration_error">There has been an error updating api configuration</string>
+  <string name="votes">%s votes</string>
+  <string name="popular_movies">Popular Movies</string>
 </resources>

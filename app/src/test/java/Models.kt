@@ -14,7 +14,7 @@ fun createMovieEntityList(size: Int) : List<MovieEntity> {
 
 fun createMovieEntity(id: Int) : MovieEntity {
     return MovieEntity(id, "name", "originalName",
-            "originalLanguage", 5.0, 6.0,
+            "originalLanguage", 5.0, 6.0f, 22,
             "overview", "posterPath")
 }
 
@@ -25,5 +25,5 @@ fun createMovieList(size: Int) : List<Movie> {
 }
 
 fun createMovie(id: Int) : Movie {
-    return Movie(id, "name", "posterPath", 6.0)
+    return Movie(id, "name", "posterPath", 6.0f, 22)
 }

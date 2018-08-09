@@ -9,7 +9,8 @@
   android:layout_height="match_parent">
   
   <android.support.v7.widget.Toolbar
-    app:title="@string/app_name"
+    android:id="@+id/toolbar"
+    app:title="@string/popular_movies"
     android:background="@color/colorPrimary"
     app:titleTextColor="@android:color/white"
     android:layout_width="match_parent"

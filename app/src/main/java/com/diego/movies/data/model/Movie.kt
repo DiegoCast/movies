@@ -10,7 +10,8 @@ data class MovieEntity(val id: Int,
                        @Json(name = "original_name") val originalName: String,
                        @Json(name = "original_language") val originalLanguage: String,
                        val popularity: Double,
-                       @Json(name = "vote_average") val voteAverage: Double,
+                       @Json(name = "vote_average") val voteAverage: Float,
+                       @Json(name = "vote_count") val voteCount: Long,
                        val overview: String,
                        @Json(name = "poster_path") val posterPath: String)
 
@@ -23,7 +24,8 @@ class MovieMapper @Inject constructor(private val repository: ConfigurationRepos
     fun mapToDomain(entity: MovieEntity): Movie = Movie(entity.id,
             entity.name,
             repository.imageBaseUrl + repository.imageSize + entity.posterPath,
-            entity.voteAverage)
+            entity.voteAverage,
+            entity.voteCount)
     
     fun mapToDomain(list: List<MovieEntity>): List<Movie> = list.map { mapToDomain(it) }
 }

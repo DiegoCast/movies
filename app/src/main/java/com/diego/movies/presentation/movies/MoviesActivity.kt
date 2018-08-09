@@ -22,7 +22,7 @@ class MoviesActivity : DaggerAppCompatActivity(), MoviesView, LifecycleOwner, Sw
     lateinit var layoutManager: GridLayoutManager
     
     companion object {
-        fun newMeInstance(context: Context): Intent {
+        fun newInstance(context: Context): Intent {
             return Intent(context, MoviesActivity::class.java)
         }
     }

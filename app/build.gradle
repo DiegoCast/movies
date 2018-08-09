@@ -61,6 +61,7 @@ android {
     
     sourceSets {
         production.java.srcDirs += 'src/common/java'
+        mock.java.srcDirs += 'src/common/java'
     }
     
     // Disable mockRelease
@@ -120,9 +121,10 @@ dependencies {
     testImplementation test.mockwebserver
     testImplementation test.mockitoKotlin
     testImplementation test.mockitoInline
-    testImplementation test.mockito
     
     androidTestImplementation test.supportAnnotations
     androidTestImplementation test.testRunner
     androidTestImplementation test.espresso
+    androidTestImplementation test.mockitoAndroid
+    androidTestImplementation test.espressoRules
 }

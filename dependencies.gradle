@@ -14,6 +14,7 @@ rootProject.ext {
     archLifeCycleVersion = '1.1.0'
     testRunnerVersion = '1.0.2'
     espressoVersion = '3.0.2'
+    espressoRulesVersion = '1.0.2'
     constraintLayoutVersion = '1.1.2'
     picassoVersion = '2.71828'
     moshiVersion = '2.4.0'
@@ -22,6 +23,7 @@ rootProject.ext {
     mockitoInlineVersion = '2.21.0'
     gsonVersion = '2.8.5'
     rxRecyclerViewBindingVersion = '2.1.1'
+    mockitoAndroidVersion = '2.8.47'
     
     dataDependencies = [
         retrofit              : "com.squareup.retrofit2:retrofit:$retrofitVersion",
@@ -65,6 +67,8 @@ rootProject.ext {
         espresso          : "com.android.support.test.espresso:espresso-core:$espressoVersion",
         mockwebserver     : "com.squareup.okhttp3:mockwebserver:$mockWebServerVersion",
         mockitoKotlin     : "com.nhaarman.mockitokotlin2:mockito-kotlin:$mockitoKotlinVersion",
-        mockitoInline     : "org.mockito:mockito-inline:$mockitoInlineVersion"
+        mockitoInline     : "org.mockito:mockito-inline:$mockitoInlineVersion",
+        mockitoAndroid    : "org.mockito:mockito-android:$mockitoAndroidVersion",
+        espressoRules     : "com.android.support.test:rules:$espressoRulesVersion"
     ]
 }
