@@ -6,5 +6,3 @@ import com.diego.movies.App
 import com.diego.movies.presentation.dependency.ApplicationComponent
 
 val Activity.app: App get() = application as App
-
-fun AppCompatActivity.getApplicationComponent(): ApplicationComponent = (app).component

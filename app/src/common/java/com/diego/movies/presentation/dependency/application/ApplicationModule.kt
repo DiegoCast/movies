@@ -1,7 +1,5 @@
 package com.diego.movies.presentation.dependency.application
 
-import android.content.Context
-import com.diego.movies.App
 import com.diego.movies.data.repository.ConfigurationRepository
 import dagger.Module
 import dagger.Provides
@@ -12,11 +10,7 @@ import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
-class ApplicationModule(val app: App) {
-    
-    @Provides
-    @Singleton
-    fun provideContext(): Context = app.baseContext
+class ApplicationModule {
     
     @Provides
     @Singleton

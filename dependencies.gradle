@@ -5,7 +5,7 @@ rootProject.ext {
     retrofitVersion = '2.3.0'
     rxJava2Version = '2.0.1'
     rxAndroidVersion = '2.0.1'
-    daggerVersion = '2.9'
+    daggerVersion = '2.13'
     annotationProcessorVersion = '1.0'
     junitVersion = '4.12'
     mockitoVersion = '1.10.19'
@@ -39,7 +39,9 @@ rootProject.ext {
         rxAndroid             : "io.reactivex.rxjava2:rxandroid:$rxAndroidVersion",
         dagger                : "com.google.dagger:dagger:$daggerVersion",
         daggerApt             : "com.google.dagger:dagger-compiler:$daggerVersion",
-        annotationProcessor   : "javax.annotation:jsr250-api:$annotationProcessorVersion"
+        annotationProcessor   : "javax.annotation:jsr250-api:$annotationProcessorVersion",
+        daggerAptAndroid      : "com.google.dagger:dagger-android-processor:$daggerVersion",
+        daggerAndroid         : "com.google.dagger:dagger-android-support:$daggerVersion"
     ]
     
     uiDependencies = [

@@ -5,18 +5,16 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.widget.SwipeRefreshLayout
-import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.GridLayoutManager
 import com.diego.movies.R
 import com.diego.movies.domain.model.Movie
-import com.diego.movies.presentation.dependency.movies.MoviesModule
-import com.diego.movies.presentation.getApplicationComponent
 import com.jakewharton.rxbinding2.support.v7.widget.RxRecyclerView
+import dagger.android.support.DaggerAppCompatActivity
 import io.reactivex.Observable
 import kotlinx.android.synthetic.main.activity_movies.*
 import javax.inject.Inject
 
-class MoviesActivity : AppCompatActivity (), MoviesView, LifecycleOwner, SwipeRefreshLayout.OnRefreshListener {
+class MoviesActivity : DaggerAppCompatActivity(), MoviesView, LifecycleOwner, SwipeRefreshLayout.OnRefreshListener {
     
     @Inject lateinit var presenter: MoviesPresenter
     
@@ -32,10 +30,6 @@ class MoviesActivity : AppCompatActivity (), MoviesView, LifecycleOwner, SwipeRe
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_movies)
-        getApplicationComponent()
-                .plusMoviesComponent(MoviesModule(this))
-                .inject(this)
-        lifecycle.addObserver(presenter)
     
         adapter = MoviesAdapter(this)
     
@@ -52,6 +46,7 @@ class MoviesActivity : AppCompatActivity (), MoviesView, LifecycleOwner, SwipeRe
         moviesRecyclerView.adapter = adapter
         
         swipeContainer.setOnRefreshListener(this)
+        lifecycle.addObserver(presenter)
     }
     
     override fun show(movies: List<Movie>) {

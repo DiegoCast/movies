@@ -1,18 +1,26 @@
 package com.diego.movies.presentation.dependency
 
+import android.content.Context
+import com.diego.movies.App
 import com.diego.movies.data.NetworkModule
 import com.diego.movies.data.RepositoryModule
 import com.diego.movies.presentation.dependency.application.ApplicationModule
-import com.diego.movies.presentation.dependency.launcher.LauncherModule
-import com.diego.movies.presentation.dependency.movies.MoviesModule
 import dagger.Component
 import javax.inject.Singleton
+import dagger.BindsInstance
+import dagger.android.AndroidInjector
+import dagger.android.support.AndroidSupportInjectionModule
+import dagger.android.support.DaggerApplication
 
 @Singleton
-@Component(modules = arrayOf(ApplicationModule::class, NetworkModule::class, RepositoryModule::class))
-interface ApplicationComponent {
+@Component(modules = arrayOf(AndroidSupportInjectionModule::class, ApplicationModule::class,
+        NetworkModule::class, RepositoryModule::class, ActivityBuilder::class))
+interface ApplicationComponent : AndroidInjector<DaggerApplication> {
     
-    fun plusMoviesComponent(moviesModule: MoviesModule) : MoviesComponent
-    
-    fun plusLauncherComponent(launcherModule: LauncherModule) : LauncherComponent
+    @Component.Builder
+    interface Builder {
+        @BindsInstance
+        fun application(application: Context): Builder
+        fun build(): ApplicationComponent
+    }
 }

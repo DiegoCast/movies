@@ -1,14 +1,13 @@
 package com.diego.movies
 
-import android.app.Application
-import com.diego.movies.presentation.dependency.ApplicationComponent
 import com.diego.movies.presentation.dependency.DaggerApplicationComponent
-import com.diego.movies.presentation.dependency.application.ApplicationModule
 import com.squareup.picasso.Picasso
+import dagger.android.AndroidInjector
+import dagger.android.support.DaggerApplication
 
-class App : Application () {
+class App : DaggerApplication() {
     
-    lateinit var component: ApplicationComponent private set
+    override fun applicationInjector(): AndroidInjector<out DaggerApplication>  = DaggerApplicationComponent.builder().application(this).build()
     
     override fun onCreate() {
         super.onCreate()
@@ -18,10 +17,5 @@ class App : Application () {
             picassoBuilder.indicatorsEnabled(true)
         }
         Picasso.setSingletonInstance(picassoBuilder.build())
-        
-        component = DaggerApplicationComponent
-                .builder()
-                .applicationModule(ApplicationModule(this))
-                .build()
     }
 }
