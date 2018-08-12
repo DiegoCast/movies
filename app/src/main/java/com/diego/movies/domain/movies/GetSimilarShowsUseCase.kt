@@ -8,7 +8,9 @@ import javax.inject.Inject
 
 class GetSimilarShowsUseCase @Inject constructor(private val repository: MoviesRepository) {
     
-    fun get(id: Int): Observable<Response<Page<List<Movie>>, Boolean>> = Observable.empty()
+    fun get(id: Int): Observable<Response<Page<List<Movie>>, Boolean>> = repository.getSimilar(id)
     
-    fun next(id: Int, page: Int) {}
+    fun next(id: Int, page: Int) {
+        repository.nextSimilar(id, page)
+    }
 }

@@ -85,4 +85,12 @@ class MoviesApiRepository @Inject constructor(private val api: MoviesRestApi,
             }
         })
     }
+    
+    override fun nextSimilar(id: Int, page: Int) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+    
+    override fun getSimilar(id: Int): Observable<Response<Page<List<Movie>>, Boolean>> {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 }
