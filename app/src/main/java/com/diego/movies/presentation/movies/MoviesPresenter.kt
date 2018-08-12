@@ -4,7 +4,6 @@ import android.app.Activity
 import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.LifecycleObserver
 import android.arch.lifecycle.OnLifecycleEvent
-import android.view.View
 import android.widget.ImageView
 import com.diego.movies.domain.model.Movie
 import com.diego.movies.domain.movies.GetMoviesUseCase

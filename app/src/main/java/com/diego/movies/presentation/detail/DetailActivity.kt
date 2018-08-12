@@ -21,6 +21,7 @@ import jp.wasabeef.picasso.transformations.ColorFilterTransformation
 import kotlinx.android.synthetic.main.activity_detail.*
 
 class DetailActivity : DaggerAppCompatActivity(), DetailView, LifecycleOwner, SwipeRefreshLayout.OnRefreshListener {
+   
     @Inject
     lateinit var presenter: DetailPresenter
     lateinit var layoutManager: LinearLayoutManager
@@ -75,5 +76,11 @@ class DetailActivity : DaggerAppCompatActivity(), DetailView, LifecycleOwner, Sw
                 .centerCrop()
                 .transform(ColorFilterTransformation(ContextCompat.getColor(this, R.color.backgroundFilter)))
                 .into(movieBackground)
+    }
+    
+    override fun showError() {
+    }
+    
+    override fun showSimilar(data: List<Movie>) {
     }
 }
