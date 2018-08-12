@@ -4,12 +4,17 @@ import RecyclerViewItemCountAssertion.Companion.withItemCount
 import android.app.Activity
 import android.support.test.InstrumentationRegistry
 import android.support.test.espresso.Espresso.onView
+import android.support.test.espresso.action.ViewActions
 import android.support.test.espresso.assertion.ViewAssertions.matches
+import android.support.test.espresso.contrib.RecyclerViewActions
 import android.support.test.espresso.matcher.ViewMatchers.*
 import android.support.test.rule.ActivityTestRule
 import android.support.test.runner.AndroidJUnit4
+import android.support.v7.widget.RecyclerView
+import android.widget.ImageView
 import com.diego.movies.domain.model.Movie
 import com.diego.movies.presentation.movies.MoviesActivity
+import com.diego.movies.presentation.movies.MoviesAdapter
 import com.diego.movies.presentation.movies.MoviesPresenter
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
@@ -24,8 +29,6 @@ import org.mockito.Mockito.mock
 @RunWith(AndroidJUnit4::class)
 class MoviesActivityTest {
     
-    val mockPresenter =  mock(MoviesPresenter::class.java)
-    
     @get:Rule
     var activityRule: ActivityTestRule<MoviesActivity> = object : ActivityTestRule<MoviesActivity>(MoviesActivity::class.java) {
         override fun beforeActivityLaunched() {
@@ -33,7 +36,8 @@ class MoviesActivityTest {
             val app = InstrumentationRegistry.getTargetContext().applicationContext as App
             var activityInjector = app.activityInjector()
             activityInjector = createFakeMainActivityInjector {
-                presenter = mockPresenter
+                //TODO this mocking method is not working. Change dagger android implementation back to regular so components and modules are mockable
+                presenter = mock(MoviesPresenter::class.java)
             }
         }
     }
@@ -64,6 +68,23 @@ class MoviesActivityTest {
         onView(withId(R.id.moviesRecyclerView)).check(withItemCount(21))
     }
     
+    @Test
+    fun click() {
+        val movies = createMovieList(20)
+        
+        // when
+        activityRule.runOnUiThread { activity.show(movies) }
+        onView(withId(R.id.moviesRecyclerView))
+                .perform(RecyclerViewActions.actionOnItemAtPosition<MoviesAdapter.ViewHolder>(0, ViewActions.click()))
+    
+        val recyclerView = activity.findViewById<RecyclerView>(R.id.moviesRecyclerView)
+        val itemView = recyclerView.layoutManager.findViewByPosition(0)
+        val imageView = itemView.findViewById<ImageView>(R.id.movieImage)
+        
+        // then
+        // verify(activity.presenter.detail(activity, imageView, movies[0]))
+    }
+    
     fun createMovieList(size: Int) : List<Movie> {
         val list = mutableListOf<Movie>()
         for (i in 0 until size) list.add(i, createMovie(i))
@@ -71,7 +92,7 @@ class MoviesActivityTest {
     }
     
     fun createMovie(id: Int) : Movie {
-        return Movie(id, "name", "posterPath", 6.0f, 22)
+        return Movie(id, "name", "posterPath", 6.0f, 22, "description", "backgroundUrl")
     }
     
     fun createFakeMainActivityInjector(block : MoviesActivity.() -> Unit)
