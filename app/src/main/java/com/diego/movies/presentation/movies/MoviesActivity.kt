@@ -34,7 +34,7 @@ class MoviesActivity : DaggerAppCompatActivity(), MoviesView, LifecycleOwner,
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_movies)
     
-        adapter = MoviesAdapter(this, this)
+        adapter = MoviesAdapter(this, this, MoviesAdapter.orientationHorizontal)
     
         layoutManager = GridLayoutManager(this, 2)
         layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {

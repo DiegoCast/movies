@@ -39,14 +39,14 @@ class MoviesPresenterTest {
     }
     
     @Test
-    fun start() {
+    fun create() {
         val response = Response(Page(movies, 0), true)
         
         // given
         Mockito.`when`(getMoviesUseCase.get()).thenReturn(Observable.just(response))
         
         // when
-        presenter.start()
+        presenter.create()
         testScheduler.triggerActions()
         
         // then
@@ -56,14 +56,14 @@ class MoviesPresenterTest {
     }
     
     @Test
-    fun `start unsuccessful`() {
+    fun `create unsuccessful`() {
         val response = Response(Page(emptyList<Movie>(), 0), false)
         
         // given
         Mockito.`when`(getMoviesUseCase.get()).thenReturn(Observable.just(response))
         
         // when
-        presenter.start()
+        presenter.create()
         testScheduler.triggerActions()
         
         // then
@@ -73,13 +73,13 @@ class MoviesPresenterTest {
     }
     
     @Test
-    fun `start error`() {
+    fun `create error`() {
         
         // given
         Mockito.`when`(getMoviesUseCase.get()).thenReturn(Observable.error(Throwable()))
         
         // when
-        presenter.start()
+        presenter.create()
         testScheduler.triggerActions()
         
         // then
@@ -96,7 +96,7 @@ class MoviesPresenterTest {
         Mockito.`when`(getMoviesUseCase.get()).thenReturn(Observable.just(response))
         
         // when
-        presenter.start()
+        presenter.create()
         testScheduler.triggerActions()
         presenter.retry()
         testScheduler.triggerActions()
@@ -115,7 +115,7 @@ class MoviesPresenterTest {
         Mockito.`when`(getMoviesUseCase.get()).thenReturn(Observable.just(response))
         
         // when
-        presenter.start()
+        presenter.create()
         testScheduler.triggerActions()
         Observable.just(7).subscribe(scrollConsumer)
         
@@ -134,7 +134,7 @@ class MoviesPresenterTest {
         Mockito.`when`(getMoviesUseCase.get()).thenReturn(Observable.just(response))
     
         // when
-        presenter.start()
+        presenter.create()
         testScheduler.triggerActions()
         Observable.just(4).subscribe(scrollConsumer)
         Observable.just(5).subscribe(scrollConsumer)

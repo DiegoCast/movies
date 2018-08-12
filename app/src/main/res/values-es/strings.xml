@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="app_name">Series Kotlin</string>
+  <string name="configuration_error">Ha habido un error al actualizar la configuracion del servidor</string>
+  <string name="votes">%s votos</string>
+  <string name="popular_shows">Series populares</string>
+  <string name="label_similar_shows">Series similares</string>
+  <string name="label_overview">Resumen</string>
+  <string name="label_no_description">Esta serie no tiene disponible ninguna descripción</string>
+</resources>

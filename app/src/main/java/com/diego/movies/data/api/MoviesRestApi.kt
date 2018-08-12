@@ -5,6 +5,7 @@ import io.reactivex.Observable
 import io.reactivex.Single
 import retrofit2.Response
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface MoviesRestApi {
@@ -15,5 +16,10 @@ interface MoviesRestApi {
     
     @GET("tv/popular")
     fun popular(@Query("api_key") apiKey: String, @Query("language") language: String,
+                @Query("page") page: Int): Observable<Response<MovieResultsEntity>>
+    
+    @GET("tv/{tv_id}/similar")
+    fun similar(@Path("tv_id") id: Int, @Query("api_key") apiKey: String,
+                @Query("language") language: String,
                 @Query("page") page: Int): Observable<Response<MovieResultsEntity>>
 }

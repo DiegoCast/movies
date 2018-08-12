@@ -8,9 +8,13 @@ import io.reactivex.Single
 
 interface MoviesRepository {
     
-    fun get() : Observable<Response<Page<List<Movie>>, Boolean>>
+    fun get(): Observable<Response<Page<List<Movie>>, Boolean>>
     
-    fun updateConfiguration() : Single<Boolean>
+    fun updateConfiguration(): Single<Boolean>
     
-    fun next(page : Int)
+    fun next(page: Int)
+    
+    fun nextSimilar(id: Int, page: Int)
+    
+    fun getSimilar(id: Int): Observable<Response<Page<List<Movie>>, Boolean>>
 }

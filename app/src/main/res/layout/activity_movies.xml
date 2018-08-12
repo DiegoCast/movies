@@ -10,7 +10,7 @@
   
   <android.support.v7.widget.Toolbar
     android:id="@+id/toolbar"
-    app:title="@string/popular_movies"
+    app:title="@string/popular_shows"
     android:background="@color/colorPrimary"
     app:titleTextColor="@android:color/white"
     android:layout_width="match_parent"

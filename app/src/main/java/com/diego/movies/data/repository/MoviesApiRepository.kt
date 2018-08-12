@@ -22,6 +22,7 @@ class MoviesApiRepository @Inject constructor(private val api: MoviesRestApi,
                                               private val mapper: MovieMapper,
                                               private val configurationRepository: ConfigurationRepository,
                                               @Named("movies_page_emitter") private val emitter: PublishSubject<Int>,
+                                              @Named("similar_page_emitter") private val emitterSimilar: PublishSubject<Int>,
                                               @Named("language") private val language: String,
                                               @Named("api_key") private val apiKey: String) : MoviesRepository {
     
@@ -62,6 +63,16 @@ class MoviesApiRepository @Inject constructor(private val api: MoviesRestApi,
         return Response(Page(total.result.data.plus(next.result.data), page), next.succesful)
     }
     
+    override fun nextSimilar(id: Int, page: Int) {
+        emitterSimilar.onNext(page)
+    }
+    
+    override fun getSimilar(id: Int): Observable<Response<Page<List<Movie>>, Boolean>> {
+        return Observable
+                .merge(seedSimilar(id), pageEmitterSimilar(id))
+                .scan { total, new -> combine(total, new) }
+    }
+    
     private fun seed(): Observable<Response<Page<List<Movie>>, Boolean>> {
         return api.popular(apiKey, language, 1).map(Function {
             if (it.isSuccessful) {
@@ -75,6 +86,30 @@ class MoviesApiRepository @Inject constructor(private val api: MoviesRestApi,
     
     private fun pageEmitter(): Observable<Response<Page<List<Movie>>, Boolean>> {
         return emitter.flatMap({ api.popular(apiKey, language, it) }, { page: Int, response: retrofit2.Response<MovieResultsEntity> ->
+            Pair(page, response)
+        }).map(Function {
+            if (it.second.isSuccessful) {
+                return@Function Response(Page(mapper.mapToDomain(it.second.body()!!.results),
+                        it.first), true)
+            } else {
+                return@Function Response(Page(emptyList<Movie>(), it.first), false)
+            }
+        })
+    }
+    
+    private fun seedSimilar(id: Int): Observable<Response<Page<List<Movie>>, Boolean>> {
+        return api.similar(id, apiKey, language, 1).map(Function {
+            if (it.isSuccessful) {
+                return@Function Response(Page(mapper.mapToDomain(it.body()!!.results),
+                        1), true)
+            } else {
+                return@Function Response(Page(emptyList<Movie>(), 1), false)
+            }
+        })
+    }
+    
+    private fun pageEmitterSimilar(id: Int): Observable<Response<Page<List<Movie>>, Boolean>> {
+        return emitterSimilar.flatMap({ api.similar(id, apiKey, language, it) }, { page: Int, response: retrofit2.Response<MovieResultsEntity> ->
             Pair(page, response)
         }).map(Function {
             if (it.second.isSuccessful) {
