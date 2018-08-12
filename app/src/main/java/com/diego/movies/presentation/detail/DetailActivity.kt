@@ -6,24 +6,27 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v4.widget.SwipeRefreshLayout
-
 import android.support.v7.widget.LinearLayoutManager
+import android.widget.ImageView
 import com.diego.movies.R
-import com.diego.movies.R.id.movieBackground
-import com.diego.movies.R.id.movieDescription
 import com.diego.movies.domain.model.Movie
+import com.diego.movies.presentation.movies.MoviesAdapter
+import com.jakewharton.rxbinding2.support.v7.widget.RxRecyclerView
 import com.squareup.picasso.Callback
 import dagger.android.support.DaggerAppCompatActivity
 import javax.inject.Inject
 import com.squareup.picasso.Picasso
-import jp.wasabeef.picasso.transformations.BlurTransformation
+import io.reactivex.Observable
 import jp.wasabeef.picasso.transformations.ColorFilterTransformation
 import kotlinx.android.synthetic.main.activity_detail.*
 
-class DetailActivity : DaggerAppCompatActivity(), DetailView, LifecycleOwner, SwipeRefreshLayout.OnRefreshListener {
+class DetailActivity : DaggerAppCompatActivity(), DetailView, LifecycleOwner, SwipeRefreshLayout.OnRefreshListener,
+        MoviesAdapter.OnCardClickListener {
    
     @Inject
     lateinit var presenter: DetailPresenter
+    
+    lateinit var adapter: MoviesAdapter
     lateinit var layoutManager: LinearLayoutManager
     
     companion object {
@@ -44,6 +47,12 @@ class DetailActivity : DaggerAppCompatActivity(), DetailView, LifecycleOwner, Sw
         postponeEnterTransition()
         movieImage.transitionName = intent.getStringExtra(sharedImageTag)
         
+        adapter = MoviesAdapter(this, this, MoviesAdapter.orientationVertical)
+        layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+    
+        similarRecyclerView.isNestedScrollingEnabled = false
+        similarRecyclerView.layoutManager = layoutManager
+        similarRecyclerView.adapter = adapter
     }
     
     override fun onRefresh() {
@@ -66,7 +75,7 @@ class DetailActivity : DaggerAppCompatActivity(), DetailView, LifecycleOwner, Sw
     }
     
     override fun show(title: String, voteAverage: Float, voteCount: Long, description: String, backgroundUrl: String?) {
-        toolbar.title = title
+        toolbarDetail.title = title
         ratingBar.rating = voteAverage / 2
         movieVotes.text = resources.getString(R.string.votes, voteCount.toString())
         movieDescription.text = description
@@ -78,9 +87,22 @@ class DetailActivity : DaggerAppCompatActivity(), DetailView, LifecycleOwner, Sw
                 .into(movieBackground)
     }
     
+    override fun showSimilar(similar: List<Movie>) {
+        val recyclerViewState = layoutManager.onSaveInstanceState()
+        adapter.updateList(similar)
+        layoutManager.onRestoreInstanceState(recyclerViewState)
+    }
+    
+    override fun getScrollObservable(): Observable<Int> {
+        return RxRecyclerView.scrollEvents(similarRecyclerView).flatMap {
+            Observable.just(layoutManager.findLastVisibleItemPosition())
+        }
+    }
+    
     override fun showError() {
     }
     
-    override fun showSimilar(data: List<Movie>) {
+    override fun onCardClick(movie: Movie, view: ImageView) {
+        presenter.detail(this, view, movie)
     }
 }

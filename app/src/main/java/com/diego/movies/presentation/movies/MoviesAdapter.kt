@@ -1,7 +1,6 @@
 package com.diego.movies.presentation.movies
 
 import android.content.Context
-import android.support.v4.view.ViewCompat
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -9,17 +8,17 @@ import com.diego.movies.R
 import com.diego.movies.domain.model.Movie
 import kotlinx.android.synthetic.main.item_list_movie.view.*
 import android.support.v7.util.DiffUtil
-import android.view.View
 import android.widget.ImageView
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.item_list_loader.view.*
 
-class MoviesAdapter(val context: Context, val onCardClickListener: OnCardClickListener) :
+class MoviesAdapter(val context: Context, val onCardClickListener: OnCardClickListener, val orientation: Int) :
         RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     
     companion object {
         val itemMovie = 0
         val itemLoader = 1
+        val orientationHorizontal = 0
+        val orientationVertical = 1
     }
     
     private val items = mutableListOf<Movie>()
@@ -33,7 +32,12 @@ class MoviesAdapter(val context: Context, val onCardClickListener: OnCardClickLi
     
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         if (viewType == itemLoader) {
-            return LoaderViewHolder(parent)
+            val loaderLayout: Int = if (orientation == orientationVertical) {
+                R.layout.list_item_loader_vertical
+            } else {
+                R.layout.item_list_loader
+            }
+            return LoaderViewHolder(parent, loaderLayout)
         }
         return ViewHolder(parent)
     }
@@ -78,6 +82,6 @@ class MoviesAdapter(val context: Context, val onCardClickListener: OnCardClickLi
         }
     }
     
-    inner class LoaderViewHolder(parent: ViewGroup) :
-            RecyclerView.ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_list_loader, parent, false))
+    inner class LoaderViewHolder(parent: ViewGroup, loaderLayout: Int) :
+            RecyclerView.ViewHolder(LayoutInflater.from(context).inflate(loaderLayout, parent, false))
 }

@@ -64,7 +64,7 @@ class MoviesApiRepository @Inject constructor(private val api: MoviesRestApi,
     }
     
     override fun nextSimilar(id: Int, page: Int) {
-        emitterSimilar.onNext(id)
+        emitterSimilar.onNext(page)
     }
     
     override fun getSimilar(id: Int): Observable<Response<Page<List<Movie>>, Boolean>> {

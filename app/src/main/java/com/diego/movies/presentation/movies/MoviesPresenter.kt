@@ -24,11 +24,11 @@ open class MoviesPresenter @Inject constructor(private val view: MoviesView,
     
     private val compositeDisposable = CompositeDisposable()
     
-    private var moviesSize: Int = 0
-    private var page: Int = 0
+    var moviesSize: Int = 0
+    var page: Int = 1
     
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
-    fun start() {
+    fun create() {
         subscribeToMovies()
         subscribeToScrollObservable()
     }
@@ -39,10 +39,8 @@ open class MoviesPresenter @Inject constructor(private val view: MoviesView,
     }
     
     fun retry() {
-        moviesSize = 0
-        page = 0
         compositeDisposable.clear()
-        start()
+        create()
     }
     
     private fun next() {
