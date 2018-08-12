@@ -78,7 +78,11 @@ class DetailActivity : DaggerAppCompatActivity(), DetailView, LifecycleOwner, Sw
         toolbarDetail.title = title
         ratingBar.rating = voteAverage / 2
         movieVotes.text = resources.getString(R.string.votes, voteCount.toString())
-        movieDescription.text = description
+        if (!description.isEmpty()) {
+            movieDescription.text = description
+        } else {
+            movieDescription.text = resources.getString(R.string.label_no_description)
+        }
         Picasso.get()
                 .load(backgroundUrl)
                 .fit()
