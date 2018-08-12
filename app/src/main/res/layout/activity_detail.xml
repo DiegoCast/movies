@@ -91,49 +91,56 @@
   
   </android.support.design.widget.AppBarLayout>
   
-  <android.support.v4.widget.NestedScrollView
+  <android.support.v4.widget.SwipeRefreshLayout
+    android:id="@+id/swipeContainerDetail"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:clipToPadding="false"
-    android:padding="16dp"
+    android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
     
-    <LinearLayout
+    <android.support.v4.widget.NestedScrollView
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:orientation="vertical">
-  
-      <TextView
-        style="@style/TextAppearance.AppCompat.Medium"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/label_overview"
-        android:textStyle="bold"/>
+      android:clipToPadding="false"
+      android:padding="16dp">
       
-      <TextView
-        android:id="@+id/movieDescription"
-        style="@style/TextAppearance.AppCompat.Medium"
-        android:layout_marginTop="16dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:text="Star Wars: Empire strikes back"/>
-      
-      <TextView
-        style="@style/TextAppearance.AppCompat.Medium"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="@string/label_similar_shows"
-        android:textStyle="bold"/>
-      
-      <android.support.v7.widget.RecyclerView
-        android:id="@+id/similarRecyclerView"
-        android:layout_marginTop="16dp"
+      <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        
+        <TextView
+          style="@style/TextAppearance.AppCompat.Medium"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/label_overview"
+          android:textStyle="bold"/>
+        
+        <TextView
+          android:id="@+id/movieDescription"
+          style="@style/TextAppearance.AppCompat.Medium"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="16dp"
+          tools:text="Star Wars: Empire strikes back"/>
+        
+        <TextView
+          style="@style/TextAppearance.AppCompat.Medium"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="16dp"
+          android:text="@string/label_similar_shows"
+          android:textStyle="bold"/>
+        
+        <android.support.v7.widget.RecyclerView
+          android:id="@+id/similarRecyclerView"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="16dp"/>
+      
+      </LinearLayout>
     
-    </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
   
-  </android.support.v4.widget.NestedScrollView>
+  </android.support.v4.widget.SwipeRefreshLayout>
 
 </android.support.design.widget.CoordinatorLayout>

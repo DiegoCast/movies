@@ -19,6 +19,7 @@ import com.squareup.picasso.Picasso
 import io.reactivex.Observable
 import jp.wasabeef.picasso.transformations.ColorFilterTransformation
 import kotlinx.android.synthetic.main.activity_detail.*
+import kotlinx.android.synthetic.main.activity_movies.*
 
 class DetailActivity : DaggerAppCompatActivity(), DetailView, LifecycleOwner, SwipeRefreshLayout.OnRefreshListener,
         MoviesAdapter.OnCardClickListener {
@@ -44,7 +45,10 @@ class DetailActivity : DaggerAppCompatActivity(), DetailView, LifecycleOwner, Sw
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
         lifecycle.addObserver(presenter)
+        
         postponeEnterTransition()
+        
+        swipeContainerDetail.setOnRefreshListener(this)
         movieImage.transitionName = intent.getStringExtra(sharedImageTag)
         
         adapter = MoviesAdapter(this, this, MoviesAdapter.orientationVertical)
@@ -56,7 +60,7 @@ class DetailActivity : DaggerAppCompatActivity(), DetailView, LifecycleOwner, Sw
     }
     
     override fun onRefresh() {
-    
+        presenter.retry()
     }
     
     override fun showPoster(url: String?) {
@@ -92,6 +96,7 @@ class DetailActivity : DaggerAppCompatActivity(), DetailView, LifecycleOwner, Sw
     }
     
     override fun showSimilar(similar: List<Movie>) {
+        swipeContainerDetail.isRefreshing = false
         val recyclerViewState = layoutManager.onSaveInstanceState()
         adapter.updateList(similar)
         layoutManager.onRestoreInstanceState(recyclerViewState)

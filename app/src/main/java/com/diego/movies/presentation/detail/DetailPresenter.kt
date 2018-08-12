@@ -80,6 +80,11 @@ class DetailPresenter @Inject constructor(private val view: DetailView,
         navigator.navigateToDetail(activity, view, movie)
     }
     
+    fun retry() {
+        compositeDisposable.clear()
+        create()
+    }
+    
     inner class ScrollConsumer : Consumer<Int> {
         override fun accept(position: Int) {
             if (moviesSize > 0 && position + paginationPositionOffset > moviesSize) {

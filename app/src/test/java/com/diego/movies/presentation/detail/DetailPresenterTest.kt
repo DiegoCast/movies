@@ -9,6 +9,7 @@ import com.diego.movies.domain.movies.GetSimilarShowsUseCase
 import com.diego.movies.presentation.Navigator
 import com.diego.movies.presentation.movies.MoviesPresenter
 import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.times
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions
 import createMovie
@@ -153,5 +154,24 @@ class DetailPresenterTest {
         
         // then
         Mockito.verify(navigator).navigateToDetail(mockActivity, mockView, movie)
+    }
+    
+    @Test
+    fun retry() {
+        val response = Response(Page(movies, 0), true)
+        
+        // given
+        Mockito.`when`(getSimilarShowsUseCase.get(1)).thenReturn(Observable.just(response))
+        
+        // when
+        presenter.create()
+        testScheduler.triggerActions()
+        presenter.retry()
+        testScheduler.triggerActions()
+        
+        // then
+        Mockito.verify(view, times(2)).getScrollObservable()
+        Mockito.verify(getSimilarShowsUseCase, times(2)).get(1)
+        Mockito.verify(view, times(2)).showSimilar(movies)
     }
 }
