@@ -1,9 +1,14 @@
 package com.diego.movies.presentation.movies
 
+import android.app.Activity
 import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.LifecycleObserver
 import android.arch.lifecycle.OnLifecycleEvent
+import android.view.View
+import android.widget.ImageView
+import com.diego.movies.domain.model.Movie
 import com.diego.movies.domain.movies.GetMoviesUseCase
+import com.diego.movies.presentation.Navigator
 import io.reactivex.Scheduler
 import javax.inject.Inject
 import io.reactivex.disposables.CompositeDisposable
@@ -12,9 +17,10 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Named
 
 open class MoviesPresenter @Inject constructor(private val view: MoviesView,
-                                          private val getMoviesUseCase: GetMoviesUseCase,
-                                          @Named("main") private val main: Scheduler,
-                                          @Named("io") private val io: Scheduler) : LifecycleObserver {
+                                               private val getMoviesUseCase: GetMoviesUseCase,
+                                               private val navigator: Navigator,
+                                               @Named("main") private val main: Scheduler,
+                                               @Named("io") private val io: Scheduler) : LifecycleObserver {
     private val paginationPositionOffset = 4
     
     private val compositeDisposable = CompositeDisposable()
@@ -22,13 +28,13 @@ open class MoviesPresenter @Inject constructor(private val view: MoviesView,
     private var moviesSize: Int = 0
     private var page: Int = 0
     
-    @OnLifecycleEvent(Lifecycle.Event.ON_START)
+    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     fun start() {
         subscribeToMovies()
         subscribeToScrollObservable()
     }
     
-    @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
+    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
     fun stop() {
         compositeDisposable.clear()
     }
@@ -68,6 +74,10 @@ open class MoviesPresenter @Inject constructor(private val view: MoviesView,
                 .observeOn(main)
                 .debounce(200, TimeUnit.MILLISECONDS)
                 .subscribe(ScrollConsumer()))
+    }
+    
+    fun detail(activity: Activity, view: ImageView, movie: Movie) {
+        navigator.navigateToDetail(activity, view, movie)
     }
     
     inner class ScrollConsumer : Consumer<Int> {

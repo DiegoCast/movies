@@ -1,7 +1,6 @@
 package com.diego.movies.presentation.dependency
 
 import android.content.Context
-import com.diego.movies.App
 import com.diego.movies.data.NetworkModule
 import com.diego.movies.data.RepositoryModule
 import com.diego.movies.presentation.dependency.application.ApplicationModule

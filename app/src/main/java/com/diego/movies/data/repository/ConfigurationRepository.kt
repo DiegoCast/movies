@@ -6,6 +6,7 @@ class ConfigurationRepository @Inject constructor() {
     
     var imageBaseUrl = ""
     var imageSize = ""
+    val backgroundImageSize = "original"
     
     fun updateConfiguration(imageBaseUrl: String, imageSizeList: List<String>) {
         this.imageBaseUrl = imageBaseUrl

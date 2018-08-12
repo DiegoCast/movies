@@ -6,6 +6,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.GridLayoutManager
+import android.view.View
+import android.widget.ImageView
 import com.diego.movies.R
 import com.diego.movies.domain.model.Movie
 import com.jakewharton.rxbinding2.support.v7.widget.RxRecyclerView
@@ -14,7 +16,8 @@ import io.reactivex.Observable
 import kotlinx.android.synthetic.main.activity_movies.*
 import javax.inject.Inject
 
-class MoviesActivity : DaggerAppCompatActivity(), MoviesView, LifecycleOwner, SwipeRefreshLayout.OnRefreshListener {
+class MoviesActivity : DaggerAppCompatActivity(), MoviesView, LifecycleOwner,
+        SwipeRefreshLayout.OnRefreshListener, MoviesAdapter.OnCardClickListener {
     
     @Inject lateinit var presenter: MoviesPresenter
     
@@ -31,7 +34,7 @@ class MoviesActivity : DaggerAppCompatActivity(), MoviesView, LifecycleOwner, Sw
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_movies)
     
-        adapter = MoviesAdapter(this)
+        adapter = MoviesAdapter(this, this)
     
         layoutManager = GridLayoutManager(this, 2)
         layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
@@ -68,5 +71,9 @@ class MoviesActivity : DaggerAppCompatActivity(), MoviesView, LifecycleOwner, Sw
     
     override fun onRefresh() {
         presenter.retry()
+    }
+    
+    override fun onCardClick(movie: Movie, view: ImageView) {
+        presenter.detail(this, view, movie)
     }
 }

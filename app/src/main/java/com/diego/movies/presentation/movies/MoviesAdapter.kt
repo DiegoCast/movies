@@ -1,6 +1,7 @@
 package com.diego.movies.presentation.movies
 
 import android.content.Context
+import android.support.v4.view.ViewCompat
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -8,9 +9,12 @@ import com.diego.movies.R
 import com.diego.movies.domain.model.Movie
 import kotlinx.android.synthetic.main.item_list_movie.view.*
 import android.support.v7.util.DiffUtil
+import android.view.View
+import android.widget.ImageView
 import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.item_list_loader.view.*
 
-class MoviesAdapter(val context: Context) :
+class MoviesAdapter(val context: Context, val onCardClickListener: OnCardClickListener) :
         RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     
     companion object {
@@ -52,6 +56,10 @@ class MoviesAdapter(val context: Context) :
         }
     }
     
+    interface OnCardClickListener {
+        fun onCardClick(movie: Movie, view: ImageView)
+    }
+    
     inner class ViewHolder(parent: ViewGroup) :
             RecyclerView.ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_list_movie, parent, false)) {
         
@@ -60,10 +68,13 @@ class MoviesAdapter(val context: Context) :
             itemView.movieText.text = item.title.capitalize()
             itemView.ratingBar.rating = item.voteAverage / 2
             itemView.movieVotes.text = context.resources.getString(R.string.votes, item.voteCount.toString())
+            itemView.movieImage.transitionName = item.id.toString()
             Picasso.get()
                     .load(item.imageUrl)
                     .error(R.drawable.placeholder)
                     .into(itemView.movieImage)
+            val image = itemView.findViewById<ImageView>(R.id.movieImage)
+            itemView.setOnClickListener { onCardClickListener.onCardClick(item, image) }
         }
     }
     

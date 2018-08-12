@@ -99,6 +99,8 @@ dependencies {
     implementation ui.picasso
     implementation ui.cardView
     implementation ui.rxRecyclerviewBinding
+    implementation ui.picassoTransformations
+    implementation ui.supportDesign
     
     implementation domain.rxJava2
     implementation domain.rxAndroid

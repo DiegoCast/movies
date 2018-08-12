@@ -22,8 +22,10 @@
       </intent-filter>
     </activity>
     
-    <activity android:name=".presentation.movies.MoviesActivity"/>
-    <activity android:name=".presentation.detail.DetailActivity"/>
+    <activity android:name=".presentation.movies.MoviesActivity"
+              android:theme="@style/DefaultActivity"/>
+    <activity android:name=".presentation.detail.DetailActivity"
+              android:theme="@style/DefaultActivity"/>
   </application>
 
 </manifest>
