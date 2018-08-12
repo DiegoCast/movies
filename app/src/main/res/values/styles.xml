@@ -1,11 +1,36 @@
 <resources>
 
   <!-- Base application theme. -->
-  <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+  <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
     <!-- Customize your theme here. -->
     <item name="colorPrimary">@color/colorPrimary</item>
     <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
     <item name="colorAccent">@color/colorAccent</item>
+  
+    <item name="ratingBarStyle">@style/MyRatingBar</item>
+  </style>
+  
+  <style name="MyRatingBar" parent="Widget.AppCompat.RatingBar.Small">
+    <item name="colorAccent">@color/colorAccent</item>
+    <item name="android:colorControlNormal">#f9a825</item>
+  </style>
+  
+  <style name="MyRatingBarLarge" parent="Widget.AppCompat.RatingBar.Indicator">
+    <item name="colorAccent">@color/colorAccent</item>
+    <item name="android:colorControlNormal">#f9a825</item>
+  </style>
+  
+  <style name="TextShadowTitle" parent="TextAppearance.AppCompat.Large">
+    <item name="android:textSize">28sp</item>
+    <item name="android:shadowColor">#000000</item>
+    <item name="android:shadowDx">4</item>
+    <item name="android:shadowDy">4</item>
+    <item name="android:shadowRadius">4</item>
+  </style>
+  
+  <style name="DefaultActivity" parent="AppTheme">
+    <item name="android:windowEnterTransition">@transition/fade</item>
+    <item name="android:windowExitTransition">@transition/fade</item>
   </style>
 
 </resources>

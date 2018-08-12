@@ -1,0 +1,77 @@
+rootProject.ext {
+    
+    butterKnifeVersion = '8.5.1'
+    supportLibraryVersion = '27.1.1'
+    retrofitVersion = '2.3.0'
+    rxJava2Version = '2.0.1'
+    rxAndroidVersion = '2.0.1'
+    daggerVersion = '2.13'
+    annotationProcessorVersion = '1.0'
+    junitVersion = '4.12'
+    mockitoVersion = '1.10.19'
+    okHttpVersion = '3.10.0'
+    mockWebServerVersion = '3.9.1'
+    archLifeCycleVersion = '1.1.0'
+    testRunnerVersion = '1.0.2'
+    espressoVersion = '3.0.2'
+    espressoRulesVersion = '1.0.2'
+    constraintLayoutVersion = '1.1.2'
+    picassoVersion = '2.71828'
+    moshiVersion = '2.4.0'
+    moshiConverterVersion = '1.6.0'
+    mockitoKotlinVersion = '2.0.0-RC1'
+    mockitoInlineVersion = '2.21.0'
+    gsonVersion = '2.8.5'
+    rxRecyclerViewBindingVersion = '2.1.1'
+    mockitoAndroidVersion = '2.8.47'
+    picassoTransformationsVersion = '2.2.1'
+    
+    dataDependencies = [
+        retrofit              : "com.squareup.retrofit2:retrofit:$retrofitVersion",
+        retrofitRxJava2Adapter: "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion",
+        loggingInterceptor    : "com.squareup.okhttp3:logging-interceptor:$okHttpVersion",
+        okHttpUrlConnection   : "com.squareup.okhttp3:okhttp-urlconnection:$okHttpVersion",
+        moshi : "com.squareup.retrofit2:converter-moshi:$moshiVersion",
+        moshiConverter : "com.squareup.retrofit2:converter-moshi:$moshiConverterVersion",
+        moshiKotlinJson : "com.squareup.moshi:moshi-kotlin:$moshiConverterVersion",
+        gson : "com.google.code.gson:gson:$gsonVersion"
+    ]
+    
+    domainDependencies = [
+        rxJava2               : "io.reactivex.rxjava2:rxjava:$rxJava2Version",
+        rxAndroid             : "io.reactivex.rxjava2:rxandroid:$rxAndroidVersion",
+        dagger                : "com.google.dagger:dagger:$daggerVersion",
+        daggerApt             : "com.google.dagger:dagger-compiler:$daggerVersion",
+        annotationProcessor   : "javax.annotation:jsr250-api:$annotationProcessorVersion",
+        daggerAptAndroid      : "com.google.dagger:dagger-android-processor:$daggerVersion",
+        daggerAndroid         : "com.google.dagger:dagger-android-support:$daggerVersion"
+    ]
+    
+    uiDependencies = [
+        supportLibrary        : "com.android.support:appcompat-v7:$supportLibraryVersion",
+        constraintLayout      : "com.android.support.constraint:constraint-layout:$constraintLayoutVersion",
+        butterKnife           : "com.jakewharton:butterknife:$butterKnifeVersion",
+        butterKnifeApt        : "com.jakewharton:butterknife-compiler:$butterKnifeVersion",
+        recyclerView          : "com.android.support:recyclerview-v7:$supportLibraryVersion",
+        archLifeCycle         : "android.arch.lifecycle:extensions:$archLifeCycleVersion",
+        archLifeCycleProcessor: "android.arch.lifecycle:compiler:$archLifeCycleVersion",
+        picasso               : "com.squareup.picasso:picasso:$picassoVersion",
+        cardView              : "com.android.support:cardview-v7:$supportLibraryVersion",
+        rxRecyclerviewBinding : "com.jakewharton.rxbinding2:rxbinding-recyclerview-v7:$rxRecyclerViewBindingVersion",
+        supportDesign         : "com.android.support:design:$supportLibraryVersion",
+        picassoTransformations: "jp.wasabeef:picasso-transformations:$picassoTransformationsVersion"
+    ]
+    
+    testDependecies = [
+        junit             : "junit:junit:$junitVersion",
+        testRunner        : "com.android.support.test:runner:$testRunnerVersion",
+        mockito           : "org.mockito:mockito-core:$mockitoVersion",
+        supportAnnotations: "com.android.support:support-annotations:$supportLibraryVersion",
+        espresso          : "com.android.support.test.espresso:espresso-core:$espressoVersion",
+        mockwebserver     : "com.squareup.okhttp3:mockwebserver:$mockWebServerVersion",
+        mockitoKotlin     : "com.nhaarman.mockitokotlin2:mockito-kotlin:$mockitoKotlinVersion",
+        mockitoInline     : "org.mockito:mockito-inline:$mockitoInlineVersion",
+        mockitoAndroid    : "org.mockito:mockito-android:$mockitoAndroidVersion",
+        espressoRules     : "com.android.support.test:rules:$espressoRulesVersion"
+    ]
+}

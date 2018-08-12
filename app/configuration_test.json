@@ -1,0 +1,12 @@
+{
+  "images": {
+    "base_url": "http://url",
+    "poster_sizes": [
+      "w500",
+      "w342",
+      "w185",
+      "w154",
+      "w90"
+    ]
+  }
+}

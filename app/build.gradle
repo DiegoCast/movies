@@ -4,30 +4,129 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
+apply plugin: 'kotlin-kapt'
+
+apply from: '../dependencies.gradle'
+
 android {
     compileSdkVersion 27
     defaultConfig {
         applicationId "com.diego.movies"
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion 27
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+    
     buildTypes {
         release {
+            manifestPlaceholders = [appName: "MoviesApp"]
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+        
+        debug {
+            manifestPlaceholders = [appName: "MoviesApp Debug"]
+            applicationIdSuffix ".debug"
+            // Avoid DexIndexOverflowException
+            // minifyEnabled true
+            // multiDexEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    
+    dataBinding {
+        enabled = true
+    }
+    
+    flavorDimensions "main"
+    
+    productFlavors {
+        mock {
+            buildConfigField "String", "ENVIRONMENT", "\"development\""
+            buildConfigField "String", "APIURL", "\"https://api.themoviedb.org/3/\""
+            buildConfigField "String", "APIKEY", "\"76a95aa43c2db657d2389027acccb1f6\""
+            
+            dimension "main"
+        }
+        production {
+            buildConfigField "String", "ENVIRONMENT", "\"production\""
+            buildConfigField "String", "APIURL", "\"https://api.themoviedb.org/3/\""
+            buildConfigField "String", "APIKEY", "\"76a95aa43c2db657d2389027acccb1f6\""
+    
+            dimension "main"
+        }
+    }
+    
+    sourceSets {
+        production.java.srcDirs += 'src/common/java'
+        mock.java.srcDirs += 'src/common/java'
+    }
+    
+    // Disable mockRelease
+    android.variantFilter { variant ->
+        if (variant.buildType.name == 'release') {
+            if (variant.getFlavors().get(0).name == 'mock') {
+                variant.setIgnore(true)
+            }
+        }
+    }
+    packagingOptions {
+        exclude 'META-INF/rxjava.properties'
     }
 }
 
 dependencies {
+    
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation"org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
-    implementation 'com.android.support:appcompat-v7:27.1.1'
-    implementation 'com.android.support.constraint:constraint-layout:1.1.2'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    
+    def ui = rootProject.ext.uiDependencies
+    def domain = rootProject.ext.domainDependencies
+    def data = rootProject.ext.dataDependencies
+    def test = rootProject.ext.testDependecies
+    
+    compileOnly domain.annotationProcessor
+    
+    implementation ui.supportLibrary
+    implementation ui.recyclerView
+    implementation ui.constraintLayout
+    implementation ui.butterKnife
+    kapt ui.butterKnifeApt
+    implementation ui.archLifeCycle
+    kapt ui.archLifeCycleProcessor
+    implementation ui.picasso
+    implementation ui.cardView
+    implementation ui.rxRecyclerviewBinding
+    implementation ui.picassoTransformations
+    implementation ui.supportDesign
+    
+    implementation domain.rxJava2
+    implementation domain.rxAndroid
+    implementation domain.dagger
+    kapt domain.daggerApt
+    kapt domain.daggerAptAndroid
+    implementation domain.daggerAndroid
+    
+    implementation data.retrofit
+    implementation data.retrofitRxJava2Adapter
+    implementation data.loggingInterceptor
+    implementation data.okHttpUrlConnection
+    implementation data.moshiConverter
+    implementation data.moshi
+    implementation data.moshiKotlinJson
+    implementation data.gson
+    
+    testImplementation test.junit
+    testImplementation test.mockito
+    testImplementation test.mockwebserver
+    testImplementation test.mockitoKotlin
+    testImplementation test.mockitoInline
+    
+    androidTestImplementation test.supportAnnotations
+    androidTestImplementation test.testRunner
+    androidTestImplementation test.espresso
+    androidTestImplementation test.mockitoAndroid
+    androidTestImplementation test.espressoRules
 }

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:card_view="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:clickable="true"
+  android:focusable="true"
+  android:foreground="?android:attr/selectableItemBackground"
+  android:minHeight="200dp"
+  card_view:cardCornerRadius="10dp"
+  card_view:cardElevation="5dp"
+  card_view:cardUseCompatPadding="true">
+  
+  <ImageView
+    android:id="@+id/movieImage"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:src="@drawable/placeholder"/>
+  
+  <TextView
+    android:id="@+id/moviePosition"
+    style="@style/TextAppearance.AppCompat.Small"
+    android:layout_width="32dp"
+    android:layout_height="32dp"
+    android:layout_margin="8dp"
+    android:background="@drawable/circle"
+    android:gravity="center"
+    android:textColor="@android:color/white"
+    android:textStyle="bold"
+    tools:text="1"/>
+  
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="bottom"
+    android:background="@android:color/white"
+    android:orientation="vertical"
+    android:padding="8dp">
+    
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal">
+      
+      <RatingBar
+        android:id="@+id/ratingBar"
+        style="@style/MyRatingBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|start"
+        android:layout_marginEnd="8dp"
+        android:isIndicator="true"
+        android:stepSize="0.5"/>
+      
+      <TextView
+        android:id="@+id/movieVotes"
+        style="@style/TextAppearance.AppCompat.Small"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|start"
+        android:textSize="12sp"/>
+    
+    </LinearLayout>
+    
+    <TextView
+      android:id="@+id/movieText"
+      style="@style/TextAppearance.AppCompat.Small"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center"
+      android:layout_margin="8dp"
+      tools:text="Star Wars: Empire strikes back"/>
+  
+  </LinearLayout>
+
+</android.support.v7.widget.CardView>
