@@ -49,7 +49,7 @@ class MoviesActivityTest {
     @Test
     fun create() {
         onView(withId(R.id.toolbar)).check(matches(isDisplayed()))
-        onView(withText(R.string.popular_movies)).check(matches(withParent(withId(R.id.toolbar))))
+        onView(withText(R.string.popular_shows)).check(matches(withParent(withId(R.id.toolbar))))
         onView(withId(R.id.itemLoader)).check(matches(isDisplayed()))
     }
     
