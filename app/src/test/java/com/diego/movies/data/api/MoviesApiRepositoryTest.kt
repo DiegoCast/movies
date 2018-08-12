@@ -33,6 +33,7 @@ class MoviesApiRepositoryTest {
     
     private lateinit var mapper: MovieMapper
     private val emitter: PublishSubject<Int> = PublishSubject.create()
+    private val emitterSimilar: PublishSubject<Int> = PublishSubject.create()
     
     private val movieResultsEntityItem = createMovieResultsEntity(1, 2)
     private val movieResultsEntityNextItem = createMovieResultsEntity(2, 1)
@@ -55,7 +56,7 @@ class MoviesApiRepositoryTest {
         moviesNextResponse = mapper.mapToDomain(movieResultsEntityNextItem.results)
         moviesNext2Response = mapper.mapToDomain(movieResultsEntityNextItem.results)
         
-        repository = MoviesApiRepository(mockApi, mapper, mockConfigurationRepository, emitter, language, apiKey)
+        repository = MoviesApiRepository(mockApi, mapper, mockConfigurationRepository, emitter, emitterSimilar, language, apiKey)
     }
     
     @Test
@@ -146,6 +147,98 @@ class MoviesApiRepositoryTest {
         Mockito.verify(mockApi).popular(apiKey, language, 1)
         Mockito.verify(mockApi).popular(apiKey, language, 2)
         Mockito.verify(mockApi).popular(apiKey, language, 3)
+        test.assertValues(first, next, next2)
+    }
+    
+    
+    @Test
+    fun `get similar shows remote success`() {
+        val response = Response.success(movieResultsEntityItem)
+        
+        // given
+        Mockito.`when`(mockApi.similar(1, apiKey, language, 1)).thenReturn(Observable.just(response))
+        
+        // when
+        val test = repository.getSimilar(1).test()
+        
+        // then
+        Mockito.verify(mockApi).similar(1, apiKey, language, 1)
+        test.assertValue(com.diego.movies.domain.model.Response(
+                Page(moviesResponse, 1), true))
+    }
+    
+    @Test
+    fun `get similar shows remote error`() {
+        val response = Response.error<MovieResultsEntity>(500, errorResponseBody)
+        
+        // given
+        Mockito.`when`(mockApi.similar(1, apiKey, language, 1))
+                .thenReturn(Observable.just(response))
+        
+        // when
+        val test = repository.getSimilar(1).test()
+        
+        // then
+        Mockito.verify(mockApi).similar(1, apiKey, language, 1)
+        test.assertValue(com.diego.movies.domain.model.Response(
+                Page(emptyList(), 1), false))
+    }
+    
+    @Test
+    fun `get similar shows remote next page success`() {
+        val response = Response.success(movieResultsEntityItem)
+        val nextPage = Response.success(movieResultsEntityNextItem)
+        val nextPage2 = Response.success(movieResultsEntityNext2Item)
+        val first = com.diego.movies.domain.model.Response(
+                Page(moviesResponse, 1), true)
+        val next = com.diego.movies.domain.model.Response(
+                Page(moviesResponse.plus(moviesNextResponse), 2), true)
+        val next2 = com.diego.movies.domain.model.Response(
+                Page(moviesResponse.plus(moviesNextResponse).plus(moviesNext2Response), 3), true)
+        
+        // given
+        Mockito.`when`(mockApi.similar(1, apiKey, language, 1)).thenReturn(Observable.just(response))
+        Mockito.`when`(mockApi.similar(1, apiKey, language, 2)).thenReturn(Observable.just(nextPage))
+        Mockito.`when`(mockApi.similar(1, apiKey, language, 3)).thenReturn(Observable.just(nextPage2))
+        
+        // when
+        val test = repository.getSimilar(1).test()
+        emitterSimilar.onNext(2)
+        emitterSimilar.onNext(3)
+        
+        // then
+        Mockito.verify(mockApi).similar(1, apiKey, language, 1)
+        Mockito.verify(mockApi).similar(1, apiKey, language, 2)
+        Mockito.verify(mockApi).similar(1, apiKey, language, 3)
+        test.assertValues(first, next, next2)
+    }
+    
+    @Test
+    fun `get similar shows remote next page unsuccessful`() {
+        val response = Response.success(movieResultsEntityItem)
+        val nextPage = Response.success(movieResultsEntityNextItem)
+        val responseError = Response.error<MovieResultsEntity>(500, errorResponseBody)
+        val first = com.diego.movies.domain.model.Response(
+                Page(moviesResponse, 1), true)
+        val next = com.diego.movies.domain.model.Response(
+                Page(moviesResponse.plus(moviesNextResponse), 2), true)
+        val next2 = com.diego.movies.domain.model.Response(
+                Page(moviesResponse.plus(moviesNextResponse), 2), false)
+        
+        // given
+        Mockito.`when`(mockApi.similar(1, apiKey, language, 1)).thenReturn(Observable.just(response))
+        Mockito.`when`(mockApi.similar(1, apiKey, language, 2)).thenReturn(Observable.just(nextPage))
+        Mockito.`when`(mockApi.similar(1, apiKey, language, 3)).thenReturn(Observable.just(responseError))
+        
+        // when
+        val test = repository.getSimilar(1).test()
+        emitterSimilar.onNext(2)
+        emitterSimilar.onNext(3)
+        
+        // then
+        Mockito.verify(mockApi).similar(1, apiKey, language, 1)
+        Mockito.verify(mockApi).similar(1, apiKey, language, 2)
+        Mockito.verify(mockApi).similar(1, apiKey, language, 3)
         test.assertValues(first, next, next2)
     }
     

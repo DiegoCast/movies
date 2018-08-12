@@ -62,5 +62,12 @@ class NetworkModule {
     }
     
     @Provides
+    @Singleton
+    @Named("similar_page_emitter")
+    fun provideSimilarPageEmitter() : PublishSubject<Int> {
+        return PublishSubject.create()
+    }
+    
+    @Provides
     fun provideMoviesApi(retrofit: Retrofit): MoviesRestApi = retrofit.create(MoviesRestApi::class.java)
 }
